@@ -42,11 +42,11 @@
         return texto
             .trim()
 
-            // remove aspas e variações nas bordas
+            // remove aspas apenas nas bordas
             .replace(/^["'“”]+/, '')
             .replace(/["'“”]+$/, '')
 
-            // remove travessão e hífen no começo
+            // remove travessão, hífen ou similares só no começo
             .replace(/^[-–—]+\s*/, '')
 
             // remove marcadores tipo * ou _ nas bordas
