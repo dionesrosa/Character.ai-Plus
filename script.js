@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Character.AI Extras
 // @namespace    https://github.com/dionesrosa
-// @version      1.0.3
+// @version      1.0.4
 // @description  Ajustes especificos para o Character.ai
 // @author       Diones Souza
 // @license      MIT
