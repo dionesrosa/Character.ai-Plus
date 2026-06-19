@@ -107,7 +107,7 @@
 
     function formatarMensagens() {
         document.querySelectorAll(
-            '[data-testid="completed-message"] p'
+            '[data-testid="completed-message"] p, [data-testid="streaming-message"] p'
         ).forEach(p => {
             if (p.dataset.caiextrasFormatado) return;
 
