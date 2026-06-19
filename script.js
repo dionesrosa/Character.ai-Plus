@@ -42,17 +42,18 @@
         return texto
             .trim()
 
-            // remove aspas apenas nas bordas
+            // aspas só nas bordas
             .replace(/^["'“”]+/, '')
             .replace(/["'“”]+$/, '')
 
-            // remove travessão, hífen ou similares só no começo
+            // travessão/hífen no início
             .replace(/^[-–—]+\s*/, '')
 
-            // remove marcadores tipo * ou _ nas bordas
-            .replace(/^[*_]+/, '')
-            .replace(/[*_]+$/, '')
+            // remove QUALQUER sequência de * ou _ nas bordas
+            .replace(/^[\s*_]+/, '')
+            .replace(/[\s*_]+$/, '')
 
+            // limpa espaços finais depois de remoções
             .trim();
     }
 
