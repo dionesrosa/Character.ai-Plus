@@ -17,7 +17,7 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getValue
 // @grant        GM_setValue
-// @connect      127.0.0.1
+// @connect      localhost
 // ==/UserScript==
 
 (function() {
