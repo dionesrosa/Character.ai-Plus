@@ -1,0 +1,16 @@
+{
+  "name": "character-ai-extras",
+  "version": "1.0.0",
+  "description": "Extensão de usuário para aprimorar a experiência no Character.AI",
+  "main": "Character-AI-Extras.user.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

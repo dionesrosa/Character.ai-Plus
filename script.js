@@ -19,7 +19,7 @@
 (function () {
     'use strict';
 
-    // --- FUNÇÕES DE UTILIDADE (HELPERS) ---
+    // Consulta segura (retorna null em caso de erro)
     const consultaSegura = (seletor, raiz = document) => {
         try {
             return raiz.querySelector(seletor);
@@ -28,6 +28,7 @@
         }
     };
 
+    // Consulta segura para múltiplos elementos (retorna array vazio em caso de erro)
     const consultaTodosSegura = (seletor, raiz = document) => {
         try {
             return Array.from(raiz.querySelectorAll(seletor));
@@ -36,9 +37,21 @@
         }
     };
 
+    // Log de aviso personalizado
     function logAviso(...args) {
         console.warn('[C.AI-Extras]', ...args);
     }
+
+     // CSS personalizado
+    GM_addStyle(`
+        .caiextras-acao {
+            border-left: 3px solid #ff1493;
+            padding-left: 12px !important;
+            margin-left: 4px !important;
+            opacity: 0.85;
+            font-style: italic;
+        }
+    `);
 
     // Oculta blocos de anúncios
     function ocultarAnuncios() {
@@ -60,12 +73,30 @@
         }
     }
 
+    // Destaca mensagens de ações (itálico único)
+    function destacarAcoes() {
+        document.querySelectorAll('[data-testid="completed-message"] p').forEach(p => {
+
+            if (p.dataset.caiextrasAcao) return;
+
+            const unicoFilho = p.children.length === 1;
+            const ehItalico = p.firstElementChild?.tagName === 'EM';
+
+            if (unicoFilho && ehItalico) {
+                p.dataset.caiextrasAcao = '1';
+                p.classList.add('caiextras-acao');
+            }
+        });
+    }
+
     // Executa uma vez ao iniciar
     ocultarAnuncios();
+    destacarAcoes();
 
     // Observa mudanças no DOM
     const observador = new MutationObserver(() => {
         ocultarAnuncios();
+        destacarAcoes();
     });
 
     observador.observe(document.body, {
