@@ -12,7 +12,6 @@
 // @downloadURL  https://raw.githubusercontent.com/dionesrosa/Character-AI-Extras/master/Character-AI-Extras.user.js
 // @match        *://character.ai/*
 // @run-at       document-idle
-// @grant        unsafeWindow
 // @grant        GM_addStyle
 // @noframes
 // ==/UserScript==
@@ -21,34 +20,57 @@
     'use strict';
 
     // --- FUNÇÕES DE UTILIDADE (HELPERS) ---
-    const consultaSegura = (seletor, raiz = document) => { try { return raiz.querySelector(seletor); } catch (e) { return null; } };
-    const consultaTodosSegura = (seletor, raiz = document) => { try { return Array.from(raiz.querySelectorAll(seletor)); } catch (e) { return []; } };
+    const consultaSegura = (seletor, raiz = document) => {
+        try {
+            return raiz.querySelector(seletor);
+        } catch (e) {
+            return null;
+        }
+    };
 
-    function logAviso(...args) { console.warn('[C.AI-Extras]', ...args); }
+    const consultaTodosSegura = (seletor, raiz = document) => {
+        try {
+            return Array.from(raiz.querySelectorAll(seletor));
+        } catch (e) {
+            return [];
+        }
+    };
 
-    // Aplica modificações de CSS e comportamento visual.
-    function modificarCSS() {
+    function logAviso(...args) {
+        console.warn('[C.AI-Extras]', ...args);
+    }
+
+    // Oculta blocos de anúncios
+    function ocultarAnuncios() {
         try {
             consultaTodosSegura('button').forEach(btn => {
+
+                // Evita processar o mesmo botão várias vezes
+                if (btn.dataset.caiextrasProcessado) return;
+                btn.dataset.caiextrasProcessado = '1';
+
                 if (btn.textContent.includes('Ocultar anúncios')) {
-                    btn.closest('div.w-full')?.style.setProperty('display', 'none', 'important');
+                    btn.closest('div.w-full')
+                        ?.style.setProperty('display', 'none', 'important');
                 }
             });
+
         } catch (erro) {
-            console.error('Erro em modificarCSS', erro);
+            console.error('[C.AI-Extras] Erro ao ocultar anúncios:', erro);
         }
     }
 
-    // Observador de Mutações para detectar a adição de elementos (menu de contexto, barra de seleção).
-    const observador = new MutationObserver((mutacoes) => {
-        // Aplica estilos CSS
-        modificarCSS();
+    // Executa uma vez ao iniciar
+    ocultarAnuncios();
+
+    // Observa mudanças no DOM
+    const observador = new MutationObserver(() => {
+        ocultarAnuncios();
     });
 
-    // Inicia a observação no documento
-    observador.observe(document.body, { childList: true, subtree: true });
+    observador.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 
-    // Aplica CSS inicial
-    window.addEventListener('load', modificarCSS);
-    document.addEventListener('readystatechange', () => { if (document.readyState === 'complete') modificarCSS(); });
 })();
