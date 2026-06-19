@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Character.AI Extras
 // @namespace    https://github.com/dionesrosa
-// @version      1.0.1
+// @version      1.0.2
 // @description  Ajustes especificos para o Character.ai
 // @author       Diones Souza
 // @license      MIT
@@ -37,24 +37,103 @@
         }
     };
 
-    // Limpeza de texto para falas (remove espaços extras, aspas, travessões e marcadores comuns)
+    // Limpeza avançada de falas e ações, removendo excessos de formatação e caracteres comuns
     function limparFala(texto) {
-        return texto
-            .trim()
+        // Remove excessos de espaços e caracteres comuns de formatação
+        texto = texto.trim();
 
-            // aspas só nas bordas
-            .replace(/^["'“”]+/, '')
-            .replace(/["'“”]+$/, '')
+        // Limpeza avançada de aspas (remove aspas órfãs, desduplica aspas adjacentes, remove envelopes externos balanceados)
+        texto = limparAspas(texto);
 
-            // travessão/hífen no início
-            .replace(/^[-–—]+\s*/, '')
+        // Remove travessões e marcadores comuns no início
+        texto = texto.replace(/^[-–—]+\s*/, '');
 
-            // remove QUALQUER sequência de * ou _ nas bordas
-            .replace(/^[\s*_]+/, '')
-            .replace(/[\s*_]+$/, '')
+        // Remove marcadores comuns no início e fim (ex: asteriscos, underscores, etc.)
+        texto = texto.replace(/^[\s*_]+/, '');
+        texto = texto.replace(/[\s*_]+$/, '');
+        
+        // Remove excessos de espaços novamente após as limpezas
+        texto = texto.trim();
 
-            // limpa espaços finais depois de remoções
-            .trim();
+        return texto;
+    }
+
+    // Limpeza avançada de aspas (remove aspas órfãs, desduplica aspas adjacentes, remove envelopes externos balanceados)
+    function limparAspas(texto) {
+        // Verifica se é string, caso contrário retorna o valor original
+        if (typeof texto !== 'string') return texto;
+
+        // Normaliza e remove excessos de aspas
+        let res = texto.trim();
+
+        // Se o resultado for vazio, retorna imediatamente
+        if (!res) return res;
+
+        // Normaliza aspas curvas e outros tipos comuns para aspas simples ou duplas
+        res = res.replace(/[“”«»]/g, '"');
+        res = res.replace(/[‘’]/g, "'");
+
+        // Função auxiliar para verificar se um caractere é uma aspa
+        const isQuote = c => c === '"' || c === "'";
+        
+        // Conta aspas não escapadas em uma string
+        const countQuotes = (s, char) => {
+            let count = 0;
+            for (let i = 0; i < s.length; i++) {
+                if (s[i] === char && (i === 0 || s[i-1] !== '\\')) count++;
+            }
+            return count;
+        };
+
+        // 1. Desduplicar aspas adjacentes (comum em erros de formatação)
+        // Ex: ""Texto"" -> "Texto"
+        res = res.replace(/"+/g, '"').replace(/'+/g, "'");
+
+        // 2. Remover envelopes externos balanceados (ex: "Texto" -> Texto)
+        let changed = true;
+        while (changed) {
+            changed = false;
+            if (res.length >= 2 && isQuote(res[0]) && res[0] === res[res.length - 1]) {
+                let char = res[0];
+                let content = res.slice(1, -1);
+                if (countQuotes(content, char) % 2 === 0) {
+                    res = content.trim();
+                    changed = true;
+                }
+            }
+        }
+
+        // 3. Limpar aspas órfãs (ímpares) nas extremidades
+        changed = true;
+        while (changed) {
+            changed = false;
+            ['"', "'"].forEach(char => {
+                let count = countQuotes(res, char);
+                if (count % 2 !== 0) {
+                    if (res.startsWith(char)) {
+                        res = res.slice(1).trim();
+                        changed = true;
+                    } else if (res.endsWith(char)) {
+                        res = res.slice(0, -1).trim();
+                        changed = true;
+                    }
+                }
+            });
+        }
+
+        // 4. Se ainda houver aspas órfãs (total ímpar), remove a primeira ocorrência
+        ['"', "'"].forEach(char => {
+            let count = countQuotes(res, char);
+            if (count % 2 !== 0) {
+                let idx = res.indexOf(char);
+                if (idx !== -1) {
+                    res = res.slice(0, idx) + res.slice(idx + 1);
+                    res = res.trim();
+                }
+            }
+        });
+
+        return res;
     }
 
     // Log de aviso personalizado
