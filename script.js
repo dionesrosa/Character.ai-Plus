@@ -8,8 +8,8 @@
 // @icon         https://character.ai/favicon.ico
 // @homepageURL  https://github.com/dionesrosa/Character-AI-Extras
 // @supportURL   https://github.com/dionesrosa/Character-AI-Extras/issues
-// @updateURL    https://raw.githubusercontent.com/dionesrosa/Character-AI-Extras/master/Character-AI-Extras.user.js
-// @downloadURL  https://raw.githubusercontent.com/dionesrosa/Character-AI-Extras/master/Character-AI-Extras.user.js
+// @updateURL    https://raw.githubusercontent.com/dionesrosa/Character-AI-Extras/master/script.js
+// @downloadURL  https://raw.githubusercontent.com/dionesrosa/Character-AI-Extras/master/script.js
 // @match        *://character.ai/*
 // @run-at       document-idle
 // @grant        GM_addStyle
