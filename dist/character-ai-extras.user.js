@@ -19,24 +19,6 @@
 (function() {
     'use strict';
 
-    // ==UserScript==
-    // @name         Character.AI Extras
-    // @namespace    https://github.com/dionesrosa
-    // @version      1.0.4
-    // @description  Ajustes especificos para o Character.ai
-    // @author       Diones Souza
-    // @license      MIT
-    // @icon         https://character.ai/favicon.ico
-    // @homepageURL  https://github.com/dionesrosa/Character-AI-Extras
-    // @supportURL   https://github.com/dionesrosa/Character-AI-Extras/issues
-    // @updateURL    https://raw.githubusercontent.com/dionesrosa/Character-AI-Extras/master/script.js
-    // @downloadURL  https://raw.githubusercontent.com/dionesrosa/Character-AI-Extras/master/script.js
-    // @match        *://character.ai/*
-    // @run-at       document-idle
-    // @grant        GM_addStyle
-    // @noframes
-    // ==/UserScript==
-    
     (function () {
         'use strict';
     
