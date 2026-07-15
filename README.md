@@ -5,7 +5,7 @@ Userscript para o Character.ai desenvolvido por Diones Souza com Tampermonkey.
 [![Licença MIT](https://img.shields.io/badge/licença-MIT-green)](LICENSE)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-suportado-orange)](https://www.tampermonkey.net/)
 
-[![Instalar](https://img.shields.io/badge/Instalar-Userscript-blue?style=for-the-badge&logo=Tampermonkey)](https://raw.githubusercontent.com/dionesrosa/Character.ai-Plus/main/dist/character-ai-extras.user.js)
+[![Instalar](https://img.shields.io/badge/Instalar-Userscript-blue?style=for-the-badge&logo=Tampermonkey)](https://raw.githubusercontent.com/dionesrosa/Character.ai-Plus/main/dist/character-ai-plus.user.js)
 
 ---
 
