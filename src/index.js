@@ -30,7 +30,7 @@ function limparFala(texto) {
     // Remove marcadores comuns no início e fim (ex: asteriscos, underscores, etc.)
     texto = texto.replace(/^[\s*_]+/, '');
     texto = texto.replace(/[\s*_]+$/, '');
-    
+
     // Remove excessos de espaços novamente após as limpezas
     texto = texto.trim();
 
@@ -54,7 +54,7 @@ function limparAspas(texto) {
 
     // Função auxiliar para verificar se um caractere é uma aspa
     const isQuote = c => c === '"' || c === "'";
-    
+
     // Conta aspas não escapadas em uma string
     const countQuotes = (s, char) => {
         let count = 0;
@@ -153,14 +153,18 @@ GM_addStyle(`
 // Oculta blocos de anúncios
 function ocultarAnuncios() {
     try {
-        consultaTodosSegura('button').forEach(btn => {
-
+        const banners = consultaTodosSegura('button').forEach(banner => {
             // Evita processar o mesmo botão várias vezes
-            if (btn.dataset.caiextrasProcessado) return;
-            btn.dataset.caiextrasProcessado = '1';
+            if (banner.dataset.caiextrasProcessado) return;
 
-            if (btn.textContent.includes('Ocultar anúncios')) {
-                btn.closest('div.w-full')
+            banner.dataset.caiextrasProcessado = '1';
+
+            // Verifica se o texto visível OU o aria-label contêm "Ocultar anúncios"
+            const temTexto = banner.textContent.includes('Ocultar anúncios');
+            const temAriaLabel = banner.getAttribute('aria-label')?.includes('Ocultar anúncios') || false;
+
+            if (temTexto || temAriaLabel) {
+                banner.closest('div.w-full')
                     ?.style.setProperty('display', 'none', 'important');
             }
         });
@@ -168,6 +172,31 @@ function ocultarAnuncios() {
     } catch (erro) {
         console.error('[C.AI-Extras] Erro ao ocultar anúncios:', erro);
     }
+}
+
+let fechandoModal = false;
+
+function fecharModal() {
+    if (fechandoModal) return;
+
+    fechandoModal = true;
+
+    let tentativas = 0;
+
+    const timer = setInterval(() => {
+        const botao = document.querySelector('button[aria-label="Fechar"]');
+
+        if (botao) {
+            botao.click();
+        }
+
+        const dialog = document.querySelector('[role="dialog"]');
+
+        if (++tentativas >= 20 || !dialog) {
+            clearInterval(timer);
+            fechandoModal = false;
+        }
+    }, 100);
 }
 
 function formatarMensagens() {
@@ -277,6 +306,7 @@ formatarMensagens();
 const observador = new MutationObserver(() => {
     ocultarAnuncios();
     formatarMensagens();
+    fecharModal();
 });
 
 observador.observe(document.body, {
