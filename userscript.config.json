@@ -4,7 +4,7 @@
   "output": "dist/character-ai-plus.user.js",
   "namespace": "https://github.com/dionesrosa",
   "copyright": "",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Ajustes específicos para o Character.ai",
   "author": "Diones Souza",
   "license": "MIT",
